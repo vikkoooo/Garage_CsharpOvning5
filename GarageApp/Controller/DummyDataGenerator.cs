@@ -39,7 +39,7 @@ namespace GarageApp.Controller
 		// Generate Airplane 
 		private static Airplane GenerateAirplane()
 		{
-			string regNumber = GenerateRegistrationNumber();
+			string regNumber = GenerateRegNumber();
 			string color = GenerateColor();
 			int wheels = GenerateWheels();
 			int engines = rand.Next(1, 7);
@@ -49,7 +49,7 @@ namespace GarageApp.Controller
 		// Generate Boat
 		private static Boat GenerateBoat()
 		{
-			string regNumber = GenerateRegistrationNumber();
+			string regNumber = GenerateRegNumber();
 			string color = GenerateColor();
 			int wheels = GenerateWheels();
 			double length = rand.Next(5, 50);
@@ -59,7 +59,7 @@ namespace GarageApp.Controller
 		// Generate Bus
 		private static Bus GenerateBus()
 		{
-			string regNumber = GenerateRegistrationNumber();
+			string regNumber = GenerateRegNumber();
 			string color = GenerateColor();
 			int wheels = GenerateWheels();
 			int seats = rand.Next(10, 100);
@@ -69,25 +69,25 @@ namespace GarageApp.Controller
 		// Generate Car
 		private static Car GenerateCar()
 		{
-			string regNumber = GenerateRegistrationNumber();
+			string regNumber = GenerateRegNumber();
 			string color = GenerateColor();
 			int wheels = GenerateWheels();
-			string fuel = GenerateFuelType();
+			string fuel = GenerateFuel();
 
 			return new Car(regNumber, color, wheels, fuel);
 		}
 		// Generate Motorcycle
 		private static Motorcycle GenerateMotorcycle()
 		{
-			string regNumber = GenerateRegistrationNumber();
+			string regNumber = GenerateRegNumber();
 			string color = GenerateColor();
 			int wheels = GenerateWheels();
-			int cc = rand.Next(125, 1000);
+			int volume = rand.Next(125, 1000);
 
-			return new Motorcycle(regNumber, color, wheels, cc);
+			return new Motorcycle(regNumber, color, wheels, volume);
 		}
 
-		private static string GenerateRegistrationNumber()
+		private static string GenerateRegNumber()
 		{
 			string possibleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 			char[] chars = possibleChars.ToCharArray();
@@ -111,7 +111,7 @@ namespace GarageApp.Controller
 			return colors[rand.Next(0, colors.Length)];
 		}
 
-		private static string GenerateFuelType()
+		private static string GenerateFuel()
 		{
 			string[] fuelTypes = { "Diesel", "Gasoline", "Electric", "Hybrid" };
 			return fuelTypes[rand.Next(0, fuelTypes.Length)];

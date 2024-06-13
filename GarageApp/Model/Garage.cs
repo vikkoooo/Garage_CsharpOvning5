@@ -46,11 +46,11 @@ namespace GarageApp.Model
 			}
 		}
 
-		public T Search(string registrationNumber)
+		public T Search(string regNumber)
 		{
 			for (int i = 0; i < count; i++)
 			{
-				if (data[i].RegistrationNumber.Equals(registrationNumber.ToUpper()))
+				if (data[i].RegNumber.Equals(regNumber.ToUpper()))
 				{
 					return data[i];
 				}
