@@ -8,12 +8,16 @@ namespace GarageApp.Model.Vehicles
 {
 	internal class Car : Vehicle
 	{
-		public string FuelType { get; protected set; }
+		public string Fuel { get; protected set; }
 
-		public Car(string registrationNumber, string color, int numberOfWheels, string fuelType)
-			: base(registrationNumber, color, numberOfWheels)
+		public Car(string regNumber, string color, int wheels, string fuel)
+			: base(regNumber, color, wheels)
 		{
-			FuelType = fuelType;
+			Fuel = fuel;
+		}
+		public override string ToString()
+		{
+			return $"{base.ToString()}, Fuel: {Fuel}";
 		}
 	}
 }

@@ -8,12 +8,17 @@ namespace GarageApp.Model.Vehicles
 {
 	internal class Airplane : Vehicle
 	{
-		public int NumberOfEngines { get; protected set; }
+		public int Engines { get; protected set; }
 
-		public Airplane(string registrationNumber, string color, int numberOfWheels, int numberOfEngines)
-			: base(registrationNumber, color, numberOfWheels)
+		public Airplane(string regNumber, string color, int wheels, int engines)
+			: base(regNumber, color, wheels)
 		{
-			NumberOfEngines = numberOfEngines;
+			Engines = engines;
+		}
+
+		public override string ToString()
+		{
+			return $"{base.ToString()}, Engines: {Engines}";
 		}
 	}
 }

@@ -9,15 +9,20 @@ namespace GarageApp.Model.Vehicles
 {
 	internal abstract class Vehicle
 	{
-		public string RegistrationNumber { get; protected set; }
+		public string RegNumber { get; protected set; }
 		public string Color { get; protected set; }
-		public int NumberOfWheels { get; protected set; }
+		public int Wheels { get; protected set; }
 
-		public Vehicle(string registrationNumber, string color, int numberOfWheels)
+		public Vehicle(string regNumber, string color, int wheels)
 		{
-			RegistrationNumber = registrationNumber;
+			RegNumber = regNumber;
 			Color = color;
-			NumberOfWheels = numberOfWheels;
+			Wheels = wheels;
+		}
+
+		public override string ToString()
+		{
+			return $"Type: {this.GetType().Name}, RegNumber: {RegNumber}, Color: {Color}, Wheels: {Wheels}";
 		}
 	}
 }

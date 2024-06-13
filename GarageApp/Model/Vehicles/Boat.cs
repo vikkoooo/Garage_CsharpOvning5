@@ -10,10 +10,14 @@ namespace GarageApp.Model.Vehicles
 	{
 		public double Length { get; protected set; }
 
-		public Boat(string registrationNumber, string color, int numberOfWheels, double length)
-			: base(registrationNumber, color, numberOfWheels)
+		public Boat(string regNumber, string color, int wheels, double length)
+			: base(regNumber, color, wheels)
 		{
 			Length = length;
+		}
+		public override string ToString()
+		{
+			return $"{base.ToString()}, Length: {Length}";
 		}
 	}
 }

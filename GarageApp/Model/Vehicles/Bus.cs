@@ -8,12 +8,16 @@ namespace GarageApp.Model.Vehicles
 {
 	internal class Bus : Vehicle
 	{
-		public int NumberOfSeats { get; protected set; }
+		public int Seats { get; protected set; }
 
-		public Bus(string registrationNumber, string color, int numberOfWheels, int numberOfSeats)
-			: base(registrationNumber, color, numberOfWheels)
+		public Bus(string regNumber, string color, int wheels, int seats)
+			: base(regNumber, color, wheels)
 		{
-			NumberOfSeats = numberOfSeats;
+			Seats = seats;
+		}
+		public override string ToString()
+		{
+			return $"{base.ToString()}, Seats: {Seats}";
 		}
 	}
 }
