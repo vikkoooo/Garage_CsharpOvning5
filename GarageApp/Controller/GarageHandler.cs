@@ -1,5 +1,6 @@
 ﻿using GarageApp.Model;
 using GarageApp.Model.Vehicles;
+using GarageApp.Viewer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,28 +18,24 @@ namespace GarageApp.Controller
 		// Constructor
 		public GarageHandler()
 		{
-			int size = 20;
+			new ConsoleUI(this);
+		}
+
+		public void StartGarage(int size)
+		{
 			garage = new Garage<Vehicle>(size); // set garage size at start (should be by user choice tho)
-			DevGenerateData(size);  // generate dummy vehicles with dummy values (fill half garage default) by calling DummyDataGenerator
-			DevPrintVehicles();
+												//DevGenerateData(size);  // generate dummy vehicles with dummy values (fill half garage default) by calling DummyDataGenerator
+												//DevPrintVehicles();
 		}
 
 		// Methods
-		private void DevGenerateData(int size, double ratio = 0.5)
+		public void DevGenerateData(int size, double ratio = 0.5)
 		{
 			int n = (int)Math.Round(size * ratio, 0);
 
 			for (int i = 0; i < n; i++)
 			{
 				garage.Add(DummyDataGenerator.GetRandomVehicle());
-			}
-		}
-
-		public void DevPrintVehicles()
-		{
-			foreach (var e in garage)
-			{
-				Console.WriteLine(e.ToString());
 			}
 		}
 
