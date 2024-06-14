@@ -28,7 +28,7 @@ namespace GarageApp.Model
 		public void Add(T element)
 		{
 			if (IsFull())
-				ResizeArray();
+				throw new IndexOutOfRangeException("Garage is full");
 			else
 				data[count++] = element; // count is increased after the operation has processed
 		}
@@ -66,6 +66,7 @@ namespace GarageApp.Model
 				return false;
 		}
 
+		// Function obsolete, can be removed?
 		private void ResizeArray()
 		{
 			int newSize = size * 2;
@@ -82,6 +83,7 @@ namespace GarageApp.Model
 			data = newArray;
 		}
 
+		// todo: this will generate some problem according to dimitris
 		public IEnumerator<T> GetEnumerator()
 		{
 			for (int i = 0; i < count; i++)
