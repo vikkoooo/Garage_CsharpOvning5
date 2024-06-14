@@ -22,7 +22,6 @@ namespace GarageApp.Viewer
 			Console.Write(message);
 		}
 
-		// TODO: PromptNumericInput + FetchNumericInput work into one function
 		internal int PromptNumericInput(string message)
 		{
 			string input = GetUserInput(message);
