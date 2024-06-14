@@ -1,19 +1,14 @@
-﻿
-using GarageApp.Controller;
-using GarageApp.Model.Vehicles;
+﻿using GarageApp.Model.Vehicles;
 using GarageApp.Viewer;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace GarageApp
+namespace GarageApp.Controller
 {
 	internal class GarageManager
 	{
 		private ConsoleUI ui;
 		private GarageHandler handler;
 		private bool isRunning = false;
-
-		// Variables used to launch app
-		//private bool success = false;
 		private int size;
 
 		public GarageManager(ConsoleUI ui)
@@ -48,7 +43,7 @@ namespace GarageApp
 			do
 			{
 				// Fill with dummy data? (Y/N)
-				var (inputSuccess, answer) = ui.PromtYesNoInput("Do you want to fill with dummy data? (Y/N)");
+				var (inputSuccess, answer) = ui.PromptYesNoInput("Do you want to fill with dummy data? (Y/N): ");
 
 				if (!inputSuccess)
 				{
@@ -80,8 +75,8 @@ namespace GarageApp
 		{
 			while (isRunning)
 			{
-				MainMenu();
-				string choice = Console.ReadLine();
+				ShowMainMenu();
+				string choice = ui.GetUserInput("Choice: ");
 				switch (choice)
 				{
 					case "1":
@@ -100,13 +95,13 @@ namespace GarageApp
 						isRunning = false;
 						break;
 					default:
-						Console.WriteLine("Invalid input, please write only the numbers displayed in the Main Menu");
+						ui.PrintLine("Invalid input, please write only the numbers displayed in the Main Menu");
 						break;
 				}
 			}
 		}
 
-		private void MainMenu()
+		private void ShowMainMenu()
 		{
 			ui.PrintLine("Main Menu");
 			ui.PrintLine("1. Add Vehicle");
