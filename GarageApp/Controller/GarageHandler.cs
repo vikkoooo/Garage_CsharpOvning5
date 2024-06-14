@@ -44,20 +44,42 @@ namespace GarageApp.Controller
 		// add vehicle to garage
 		public void Add(Vehicle v)
 		{
-			garage.Add(v); // todo: throw exception if error
+			try
+			{
+				garage.Add(v);
+			}
+			catch (Exception)
+			{
+				throw;
+			}
 		}
 
-		// remove vehicle from garage (maybe by searching on the reg number instead??)
-		public void Remove(Vehicle v)
+		// remove vehicle from garage
+		public void Remove(string regNumber)
 		{
-			garage.Remove(v); // todo: throw exception if error
+			try
+			{
+				garage.Remove(regNumber.ToUpper());
+			}
+			catch (Exception)
+			{
+				throw;
+			}
 		}
 
 		// find a vehicle by reg number (remember .toupper)
-		public Vehicle Search(string query)
+		public Vehicle Search(string regNumber)
 		{
 			// todo: throw exception if we get null object back
-			return garage.Search(query.ToUpper());
+			try
+			{
+				return garage.Search(regNumber.ToUpper());
+			}
+			catch (Exception)
+			{
+				throw;
+			}
+
 		}
 
 		// list all current vehicles
