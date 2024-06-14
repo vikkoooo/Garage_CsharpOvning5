@@ -1,5 +1,7 @@
 ﻿using GarageApp.Model.Vehicles;
 using GarageApp.Viewer;
+using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GarageApp.Controller
@@ -75,7 +77,7 @@ namespace GarageApp.Controller
 		{
 			while (isRunning)
 			{
-				ShowMainMenu();
+				MainMenu();
 				string choice = ui.GetUserInput("Choice: ");
 				switch (choice)
 				{
@@ -101,7 +103,7 @@ namespace GarageApp.Controller
 			}
 		}
 
-		private void ShowMainMenu()
+		private void MainMenu()
 		{
 			ui.PrintLine("Main Menu");
 			ui.PrintLine("1. Add Vehicle");
@@ -109,17 +111,75 @@ namespace GarageApp.Controller
 			ui.PrintLine("3. List Vehicles");
 			ui.PrintLine("4. Search Vehicle");
 			ui.PrintLine("0. Exit");
-			ui.Print("Choice: ");
+		}
+
+		private void AddVehicleMenu()
+		{
+			ui.PrintLine("Add Vehicle");
+			ui.PrintLine("1. Airplane");
+			ui.PrintLine("2. Boat");
+			ui.PrintLine("3. Bus");
+			ui.PrintLine("4. Car");
+			ui.PrintLine("5. Motorcycle");
 		}
 
 		private void AddVehicle()
 		{
-			throw new NotImplementedException();
+			AddVehicleMenu();
+			string choice = ui.GetUserInput("Choice: ");
+
+			string regNumber = ui.GetUserInput("Registration number: ");
+			string color = ui.GetUserInput("Color: ");
+			int wheels = ui.PromptNumericInput("Number of wheels: ");
+
+			switch (choice)
+			{
+				case "1":
+					int engines = ui.PromptNumericInput("Number of engines: ");
+					try
+					{
+						handler.Add(new Airplane(regNumber, color, wheels, engines));
+					}
+					catch (IndexOutOfRangeException e)
+					{
+						ui.PrintLine("Garage is full");
+					}
+					break;
+				case "2":
+					int length = ui.PromptNumericInput("Length: ");
+					handler.Add(new Boat(regNumber, color, wheels, length));
+					break;
+				case "3":
+					int seats = ui.PromptNumericInput("Number of seats: ");
+					handler.Add(new Bus(regNumber, color, wheels, seats));
+					break;
+				case "4":
+					string fuel = ui.GetUserInput("Type of fuel: ");
+					handler.Add(new Car(regNumber, color, wheels, fuel));
+					break;
+				case "5":
+					int volume = ui.PromptNumericInput("Cylinder volume: ");
+					handler.Add(new Motorcycle(regNumber, color, wheels, volume));
+					break;
+				default:
+					ui.PrintLine("Invalid choice. Going back to main menu");
+					break;
+			}
 		}
 
 		private void RemoveVehicle()
 		{
-			throw new NotImplementedException();
+			string regNumber = ui.GetUserInput("Enter registration number of Vehicle to remove: ");
+			try
+			{
+				handler.Remove(regNumber);
+				ui.PrintLine($"Success removing Vehicle with registration number: {regNumber}");
+			}
+			catch (Exception e)
+			{
+				ui.PrintLine($"Did not find any Vehicle with registration number {regNumber}");
+				ui.PrintLine($"DEVSTUFF: exeception e: {e.Message}");
+			}
 		}
 
 		private void ListVehicles()
@@ -133,7 +193,18 @@ namespace GarageApp.Controller
 
 		private void SearchVehicle()
 		{
-			throw new NotImplementedException();
+			string regNumber = ui.GetUserInput("Enter registration number of Vehicle to search for: ");
+			try
+			{
+				Vehicle vehicle = handler.Search(regNumber);
+				ui.PrintLine($"Found vehicle: with registration number{vehicle.RegNumber}");
+				ui.PrintLine(vehicle.ToString());
+			}
+			catch (Exception e)
+			{
+				ui.PrintLine($"Did not find any Vehicle with registration number {regNumber}");
+				ui.PrintLine($"DEVSTUFF: exeception e: {e.Message}");
+			}
 		}
 	}
 }
