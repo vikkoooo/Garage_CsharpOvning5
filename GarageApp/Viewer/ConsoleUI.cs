@@ -12,11 +12,6 @@ namespace GarageApp.Viewer
 {
 	internal class ConsoleUI
 	{
-		public ConsoleUI()
-		{
-		}
-
-		// NEW FUNCTIONS HERE AFTER MEETING WITH DIMITRIS
 		internal void PrintLine(string message)
 		{
 			Console.WriteLine(message);
@@ -27,14 +22,18 @@ namespace GarageApp.Viewer
 			Console.Write(message);
 		}
 
+		// TODO: PromptNumericInput + FetchNumericInput work into one function
 		internal int PromptNumericInput(string message)
 		{
-			Console.Write(message); // ask user for input
-			var (success, number) = FetchNumericInput();
+			string input = GetUserInput(message);
 
-			if (success)
+			// Validate input
+			if (string.IsNullOrWhiteSpace(input))
 			{
-
+				return -1;
+			}
+			if (int.TryParse(input, out int number))
+			{
 				return number;
 			}
 			else
@@ -43,30 +42,9 @@ namespace GarageApp.Viewer
 			}
 		}
 
-		internal (bool, int) FetchNumericInput()
+		internal (bool, char) PromptYesNoInput(string message)
 		{
-			// Get user input
-			string input = Console.ReadLine();
-
-			// Validate input
-			if (string.IsNullOrWhiteSpace(input))
-			{
-				return (false, -1);
-			}
-			if (int.TryParse(input, out int number))
-			{
-				return (true, number);
-			}
-			else
-			{
-				return (false, -1);
-			}
-		}
-
-		internal (bool, char) PromtYesNoInput(string message)
-		{
-			Console.WriteLine(message);
-			string input = Console.ReadLine();
+			string input = GetUserInput(message);
 
 			if (!string.IsNullOrWhiteSpace(input))
 			{
@@ -88,6 +66,12 @@ namespace GarageApp.Viewer
 			{
 				return (false, ' ');
 			}
+		}
+
+		internal string GetUserInput(string prompt)
+		{
+			Print(prompt);
+			return Console.ReadLine();
 		}
 	}
 }
