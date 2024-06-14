@@ -16,22 +16,24 @@ namespace GarageApp.Controller
 		private Garage<Vehicle> garage;
 
 		// Constructor
-		public GarageHandler()
+		public GarageHandler(int size)
 		{
-			new ConsoleUI(this);
-		}
-
-		public void StartGarage(int size)
-		{
-			garage = new Garage<Vehicle>(size); // set garage size at start (should be by user choice tho)
-												//DevGenerateData(size);  // generate dummy vehicles with dummy values (fill half garage default) by calling DummyDataGenerator
-												//DevPrintVehicles();
+			garage = new Garage<Vehicle>(size); // set garage size at start
 		}
 
 		// Methods
 		public void DevGenerateData(int size, double ratio = 0.5)
 		{
-			int n = (int)Math.Round(size * ratio, 0);
+			int n;
+
+			if (size == 1) // Check edge case
+			{
+				n = 1;
+			}
+			else
+			{
+				n = (int)Math.Round(size * ratio, 0);
+			}
 
 			for (int i = 0; i < n; i++)
 			{
