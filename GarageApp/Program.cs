@@ -1,4 +1,5 @@
 ﻿using GarageApp.Controller;
+using GarageApp.Viewer;
 
 namespace GarageApp
 {
@@ -6,7 +7,8 @@ namespace GarageApp
 	{
 		static void Main(string[] args)
 		{
-			new GarageHandler();
+			GarageManager manager = new GarageManager(new ConsoleUI());
+			manager.Launch();
 		}
 	}
 }
