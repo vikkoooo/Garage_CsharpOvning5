@@ -2,6 +2,7 @@
 using GarageApp.Model.Vehicles;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,114 +12,82 @@ namespace GarageApp.Viewer
 {
 	internal class ConsoleUI
 	{
-		// Variables
-		private GarageHandler handler;
-		private bool isRunning = false;
-		private int size = 0;
-
-		public ConsoleUI(GarageHandler handler)
+		public ConsoleUI()
 		{
-			Console.WriteLine("Welcome to Garage APP! Make sure to start with creating a Garage");
-			this.handler = handler;
-			isRunning = true;
-			StartApp();
 		}
 
-		private void MainMenuDisplay()
+		// NEW FUNCTIONS HERE AFTER MEETING WITH DIMITRIS
+		internal void PrintLine(string message)
 		{
-			Console.WriteLine();
-			Console.WriteLine("Main Menu");
-			Console.WriteLine("1. Create Garage");
-			Console.WriteLine("2. Populate Garage with Vehicles");
-			Console.WriteLine("3. Add Vehicle");
-			Console.WriteLine("4. Remove Vehicle");
-			Console.WriteLine("5. List Vehicles");
-			Console.WriteLine("6. Search Vehicle");
-			Console.WriteLine("0. Exit");
-			Console.Write("Choice: ");
+			Console.WriteLine(message);
 		}
 
-		private void StartApp()
+		internal void Print(string message)
 		{
-			while (isRunning)
+			Console.Write(message);
+		}
+
+		internal int PromptNumericInput(string message)
+		{
+			Console.Write(message); // ask user for input
+			var (success, number) = FetchNumericInput();
+
+			if (success)
 			{
-				MainMenuDisplay();
-				string choice = Console.ReadLine();
-				switch (choice)
-				{
 
-					case "1":
-						CreateGarage();
-						break;
-					case "2":
-						PopulateGarage();
-						break;
-					case "3":
-						AddVehicle();
-						break;
-					case "4":
-						RemoveVehicle();
-						break;
-					case "5":
-						ListVehicles();
-						break;
-					case "7":
-						SearchVehicle();
-						break;
-					case "0":
-						isRunning = false;
-						break;
-					default:
-						Console.WriteLine("Invalid input, please write only the numbers displayed in the Main Menu");
-						break;
-				}
-			}
-		}
-
-		// todo: make sure it is only possible to create one garage
-		private void CreateGarage()
-		{
-			Console.WriteLine("Enter the size of the garage you want to create");
-			Console.Write("Size: ");
-
-			if (int.TryParse(Console.ReadLine(), out size))
-			{
-				handler.StartGarage(size);
-				Console.WriteLine($"Garage of size {size} created");
+				return number;
 			}
 			else
 			{
-				Console.WriteLine("Invalid size input, please try again");
+				return -1;
 			}
 		}
 
-		private void PopulateGarage()
+		internal (bool, int) FetchNumericInput()
 		{
-			handler.DevGenerateData(size);
-		}
+			// Get user input
+			string input = Console.ReadLine();
 
-		private void AddVehicle()
-		{
-			throw new NotImplementedException();
-		}
-
-		private void RemoveVehicle()
-		{
-			throw new NotImplementedException();
-		}
-
-		private void ListVehicles()
-		{
-			IEnumerable<Vehicle> list = handler.GetVehicles();
-			foreach (Vehicle vehicle in list)
+			// Validate input
+			if (string.IsNullOrWhiteSpace(input))
 			{
-				Console.WriteLine(vehicle.ToString());
+				return (false, -1);
+			}
+			if (int.TryParse(input, out int number))
+			{
+				return (true, number);
+			}
+			else
+			{
+				return (false, -1);
 			}
 		}
 
-		private void SearchVehicle()
+		internal (bool, char) PromtYesNoInput(string message)
 		{
-			throw new NotImplementedException();
+			Console.WriteLine(message);
+			string input = Console.ReadLine();
+
+			if (!string.IsNullOrWhiteSpace(input))
+			{
+				char[] answer = input.ToUpper().ToCharArray();
+				if (answer[0] == 'Y')
+				{
+					return (true, 'Y');
+				}
+				else if (answer[0] == 'N')
+				{
+					return (true, 'N');
+				}
+				else
+				{
+					return (false, ' ');
+				}
+			}
+			else
+			{
+				return (false, ' ');
+			}
 		}
 	}
 }
