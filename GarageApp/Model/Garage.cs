@@ -28,7 +28,7 @@ namespace GarageApp.Model
 		public void Add(T element)
 		{
 			if (IsFull())
-				throw new IndexOutOfRangeException("Garage is full");
+				throw new InvalidOperationException("Garage is full");
 			else
 				data[count++] = element; // count is increased after the operation has processed
 		}
@@ -37,7 +37,7 @@ namespace GarageApp.Model
 		{
 			for (int i = 0; i < count; i++)
 			{
-				if (data[i].RegNumber.Equals(regNumber.ToUpper()))
+				if (data[i].RegNumber.Equals(regNumber))
 				{
 					data[i] = data[count - 1]; // move the last element of the array to current position to avoid a "hole" in the dataset
 					data[count - 1] = null; // clear last position to avoid confusion
@@ -52,7 +52,7 @@ namespace GarageApp.Model
 		{
 			for (int i = 0; i < count; i++)
 			{
-				if (data[i].RegNumber.Equals(regNumber.ToUpper()))
+				if (data[i].RegNumber.Equals(regNumber))
 				{
 					return data[i];
 				}
@@ -66,23 +66,6 @@ namespace GarageApp.Model
 				return true;
 			else
 				return false;
-		}
-
-		// Function obsolete, can be removed?
-		private void ResizeArray()
-		{
-			int newSize = size * 2;
-			T[] newArray = new T[newSize];
-
-			// iterate over old array and old size/count (should be the same now)
-			for (int i = 0; i < count; i++)
-			{
-				newArray[i] = data[i]; // copy element by element over
-			}
-
-			// rewrite variables
-			size = newSize;
-			data = newArray;
 		}
 
 		// todo: this will generate some problem according to dimitris
