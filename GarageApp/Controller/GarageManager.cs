@@ -59,7 +59,7 @@ namespace GarageApp.Controller
 					if (answer == 'Y')
 					{
 						ui.PrintLine("Filling the garage with dummy data");
-						handler.DevGenerateData(size);
+						handler.GenerateData(size);
 					}
 					else if (answer == 'N')
 					{
@@ -93,6 +93,9 @@ namespace GarageApp.Controller
 					case "4":
 						SearchVehicle();
 						break;
+					case "5":
+						FilterVehicles();
+						break;
 					case "0":
 						isRunning = false;
 						break;
@@ -110,6 +113,7 @@ namespace GarageApp.Controller
 			ui.PrintLine("2. Remove Vehicle");
 			ui.PrintLine("3. List Vehicles");
 			ui.PrintLine("4. Search Vehicle");
+			ui.PrintLine("5. Filter for Vehicles");
 			ui.PrintLine("0. Exit");
 		}
 
@@ -139,96 +143,95 @@ namespace GarageApp.Controller
 			{
 				case "1":
 					regNumber = ui.GetUserTextInput("Registration number (6 characters only numbers and letters): ").ToUpper();
-					if (!ValidRegNumber(regNumber))
+					if (!handler.ValidRegNumber(regNumber))
 						goto invalidInput;
 
 					color = ui.GetUserTextInput("Color: ");
-					if (!ValidColor(color))
+					if (!handler.ValidColor(color))
 						goto invalidInput;
 
 					wheels = ui.PromptNumericInput("Number of wheels: ");
-
-					if (!ValidWheels(wheels))
+					if (!handler.ValidWheels(wheels))
 						goto invalidInput;
 
 					int engines = ui.PromptNumericInput("Number of engines: ");
-					if (!ValidEngines(engines))
+					if (!handler.ValidEngines(engines))
 						goto invalidInput;
 
 					vehicle = new Airplane(regNumber, color, wheels, engines);
 					break;
 				case "2":
 					regNumber = ui.GetUserTextInput("Registration number (6 characters only numbers and letters): ").ToUpper();
-					if (!ValidRegNumber(regNumber))
+					if (!handler.ValidRegNumber(regNumber))
 						goto invalidInput;
 
 					color = ui.GetUserTextInput("Color: ");
-					if (!ValidColor(color))
+					if (!handler.ValidColor(color))
 						goto invalidInput;
 
 					wheels = ui.PromptNumericInput("Number of wheels: ");
-					if (!ValidWheels(wheels))
+					if (!handler.ValidWheels(wheels))
 						goto invalidInput;
 
 					double length = ui.PromptNumericInput("Length: ");
-					if (!ValidLength(length))
+					if (!handler.ValidLength(length))
 						goto invalidInput;
 
 					vehicle = new Boat(regNumber, color, wheels, length);
 					break;
 				case "3":
 					regNumber = ui.GetUserTextInput("Registration number (6 characters only numbers and letters): ").ToUpper();
-					if (!ValidRegNumber(regNumber))
+					if (!handler.ValidRegNumber(regNumber))
 						goto invalidInput;
 
 					color = ui.GetUserTextInput("Color: ");
-					if (!ValidColor(color))
+					if (!handler.ValidColor(color))
 						goto invalidInput;
 
 					wheels = ui.PromptNumericInput("Number of wheels: ");
-					if (!ValidWheels(wheels))
+					if (!handler.ValidWheels(wheels))
 						goto invalidInput;
 
 					int seats = ui.PromptNumericInput("Number of seats: ");
-					if (!ValidSeats(seats))
+					if (!handler.ValidSeats(seats))
 						goto invalidInput;
 
 					vehicle = new Bus(regNumber, color, wheels, seats);
 					break;
 				case "4":
 					regNumber = ui.GetUserTextInput("Registration number (6 characters only numbers and letters): ").ToUpper();
-					if (!ValidRegNumber(regNumber))
+					if (!handler.ValidRegNumber(regNumber))
 						goto invalidInput;
 
 					color = ui.GetUserTextInput("Color: ");
-					if (!ValidColor(color))
+					if (!handler.ValidColor(color))
 						goto invalidInput;
 
 					wheels = ui.PromptNumericInput("Number of wheels: ");
-					if (!ValidWheels(wheels))
+					if (!handler.ValidWheels(wheels))
 						goto invalidInput;
 
 					string fuel = ui.GetUserTextInput("Type of fuel (Diesel, Gasoline, Electric, Hybrid): ");
-					if (!ValidFuel(fuel))
+					if (!handler.ValidFuel(fuel))
 						goto invalidInput;
 
 					vehicle = new Car(regNumber, color, wheels, fuel);
 					break;
 				case "5":
 					regNumber = ui.GetUserTextInput("Registration number (6 characters only numbers and letters): ").ToUpper();
-					if (!ValidRegNumber(regNumber))
+					if (!handler.ValidRegNumber(regNumber))
 						goto invalidInput;
 
 					color = ui.GetUserTextInput("Color: ");
-					if (!ValidColor(color))
+					if (!handler.ValidColor(color))
 						goto invalidInput;
 
 					wheels = ui.PromptNumericInput("Number of wheels: ");
-					if (!ValidWheels(wheels))
+					if (!handler.ValidWheels(wheels))
 						goto invalidInput;
 
 					int volume = ui.PromptNumericInput("Cylinder volume: ");
-					if (!ValidVolume(volume))
+					if (!handler.ValidVolume(volume))
 						goto invalidInput;
 
 					vehicle = new Motorcycle(regNumber, color, wheels, volume);
@@ -253,87 +256,6 @@ namespace GarageApp.Controller
 			{
 				ui.PrintLine($"Unknown error: {ex.Message}");
 			}
-		}
-
-		private bool IsTakenRegNumber(string regNumber)
-		{
-			IEnumerable<Vehicle> list = handler.GetVehicles();
-			bool isTaken = list.Any(vehicle => vehicle.RegNumber == regNumber);
-
-			return isTaken;
-		}
-
-		private bool ValidRegNumber(string regNumber)
-		{
-			if ((string.IsNullOrEmpty(regNumber)) || regNumber.Length != 6 || !regNumber.All(char.IsLetterOrDigit) || IsTakenRegNumber(regNumber))
-			{
-				return false;
-			}
-			return true;
-		}
-
-		private bool ValidColor(string color)
-		{
-			if (string.IsNullOrEmpty(color))
-			{
-				return false;
-			}
-			return true;
-		}
-
-		private bool ValidWheels(int wheels)
-		{
-			if (wheels > 0)
-			{
-				return true;
-			}
-			return false;
-		}
-
-		private bool ValidEngines(int engines)
-		{
-			if (engines > 0)
-			{
-				return true;
-			}
-			return false;
-		}
-
-		private bool ValidLength(double length)
-		{
-			if (length > 0)
-			{
-				return true;
-			}
-			return false;
-		}
-
-		private bool ValidSeats(int seats)
-		{
-			if (seats > 0)
-			{
-				return true;
-			}
-			return false;
-		}
-
-		private bool ValidFuel(string fuel)
-		{
-			string[] fuelTypes = { "DIESEL", "GASOLINE", "ELECTRIC", "HYBRID" };
-			if (!string.IsNullOrWhiteSpace(fuel) && fuelTypes.Contains(fuel.ToUpper()))
-			{
-				return true;
-			}
-			return false;
-		}
-
-		private bool ValidVolume(int volume)
-		{
-			if (volume > 0)
-			{
-				return true;
-			}
-			return false;
 		}
 
 		private void RemoveVehicle()
@@ -381,5 +303,149 @@ namespace GarageApp.Controller
 				ui.PrintLine($"Unknown error: {ex.Message}");
 			}
 		}
+		private void FilterVehiclesMenu()
+		{
+			ui.PrintLine("Menu for filter type (level 1)");
+			ui.PrintLine("1. All vehicles");
+			ui.PrintLine("2. Airplanes only");
+			ui.PrintLine("3. Boats only");
+			ui.PrintLine("4. Buses only");
+			ui.PrintLine("5. Cars only");
+			ui.PrintLine("6. Motorcycles only");
+			ui.PrintLine("0. Exit Filter Menu");
+		}
+
+		private void FilterVehicles()
+		{
+			FilterVehiclesMenu();
+			string typeChoice = ui.GetUserTextInput("Enter filter type choice: ");
+
+			string vehicleType = "All";
+
+			switch (typeChoice)
+			{
+				case "1":
+					vehicleType = "All";
+					break;
+				case "2":
+					vehicleType = "Airplane";
+					break;
+				case "3":
+					vehicleType = "Boat";
+					break;
+				case "4":
+					vehicleType = "Bus";
+					break;
+				case "5":
+					vehicleType = "Car";
+					break;
+				case "6":
+					vehicleType = "Motorcycle";
+					break;
+				case "0":
+					ui.PrintLine("Exiting filter menu.");
+					return;
+				default:
+					ui.PrintLine("Invalid choice. Please enter a number from 0 to 6");
+					break;
+			}
+
+			// Ask user if they want to filter by an attribute
+			var (inputSuccess, answer) = ui.PromptYesNoInput("Filter by attribute? (Y/N) ");
+
+			if (!inputSuccess)
+			{
+				ui.PrintLine("Invalid (Y/N) input entered, please start with Y for Yes or N for No. Going back to main menu.");
+				return;
+			}
+			else
+			{
+				if (answer == 'Y')
+				{
+					string attributeName = ui.GetUserTextInput("Enter attribute name (RegNumber, Color, Wheels): ").ToUpper();
+					string attributeValue = ui.GetUserTextInput("Enter filter value: ");
+
+					FilterSearch(vehicleType, attributeName, attributeValue);
+				}
+				else if (answer == 'N')
+				{
+					FilterSearch(vehicleType, null, null);
+				}
+			}
+		}
+		private void FilterSearch(string vehicleType, string attributeName, string attributeValue)
+		{
+			if (attributeName == null || attributeValue == null)
+			{
+				IEnumerable<Vehicle> filteredVehicles = handler.FilterVehiclesTypeOnly(vehicleType);
+
+				ui.PrintLine($"Filtered results for {vehicleType}");
+				foreach (var v in filteredVehicles)
+				{
+					ui.PrintLine(v.ToString());
+				}
+			}
+			else
+			{
+				IEnumerable<Vehicle> filteredVehicles = handler.FilterVehiclesAll(vehicleType, attributeName, attributeValue);
+
+				ui.PrintLine($"Filtered results for {vehicleType} with {attributeName} and value {attributeValue}");
+				foreach (var v in filteredVehicles)
+				{
+					ui.PrintLine(v.ToString());
+				}
+			}
+		}
+
+		/*
+		private void FilterVehiclesAttributeMenu()
+		{
+			ui.PrintLine("Menu for filter attribute (level 2)");
+			ui.PrintLine("1. All attributes");
+			ui.PrintLine("2. Registration number only");
+			ui.PrintLine("3. Colors only");
+			ui.PrintLine("4. Wheels only");
+			ui.PrintLine("0. Exit filter menu");
+		}
+
+		private void FilterVehiclesAttribute(string vehicleType)
+		{
+
+			ui.PrintLine($"Filtering by {vehicleType}");
+
+			FilterVehiclesAttributeMenu();
+
+			string attribute = ui.GetUserTextInput("Enter filter attribute choice: ");
+			string attributeValue = null;
+
+			switch (attribute)
+			{
+				case "1":
+					FilterSearch(vehicleType, "All", attributeValue);
+					break;
+				case "2":
+					attributeValue = ui.GetUserTextInput("Enter attribute filter value: ");
+					FilterSearch(vehicleType, "RegNumber", attributeValue);
+					break;
+				case "3":
+					attributeValue = ui.GetUserTextInput("Enter attribute filter value: ");
+					FilterSearch(vehicleType, "Color", attributeValue);
+					break;
+				case "4":
+					attributeValue = ui.GetUserTextInput("Enter attribute filter value: ");
+					FilterSearch(vehicleType, "Wheels", attributeValue);
+					break;
+				case "0":
+					ui.PrintLine($"Exiting {vehicleType} filter.");
+					return;
+				default:
+					ui.PrintLine("Invalid choice. Please enter a number from 0 to 4");
+					break;
+			}
+
+		}
+		*/
+
+
 	}
 }

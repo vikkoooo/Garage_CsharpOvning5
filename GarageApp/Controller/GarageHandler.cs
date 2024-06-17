@@ -22,7 +22,7 @@ namespace GarageApp.Controller
 		}
 
 		// Methods
-		public void DevGenerateData(int size, double ratio = 0.5)
+		public void GenerateData(int size, double ratio = 0.5)
 		{
 			int n;
 
@@ -86,7 +86,124 @@ namespace GarageApp.Controller
 			return garage.ToList();
 		}
 
-		// list specific type of vehicle and the count of those
-		// find using linq "all black with 4 wheels", "all motorcycles pink 3 wheels", "all trucks", "all red"
+		public bool IsTakenRegNumber(string regNumber)
+		{
+			IEnumerable<Vehicle> list = GetVehicles();
+			bool isTaken = list.Any(vehicle => vehicle.RegNumber == regNumber);
+
+			return isTaken;
+		}
+
+		public bool ValidRegNumber(string regNumber)
+		{
+			if ((string.IsNullOrEmpty(regNumber)) || regNumber.Length != 6 || !regNumber.All(char.IsLetterOrDigit) || IsTakenRegNumber(regNumber))
+			{
+				return false;
+			}
+			return true;
+		}
+
+		public bool ValidColor(string color)
+		{
+			if (string.IsNullOrEmpty(color))
+			{
+				return false;
+			}
+			return true;
+		}
+
+		public bool ValidWheels(int wheels)
+		{
+			if (wheels > 0)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		public bool ValidEngines(int engines)
+		{
+			if (engines > 0)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		public bool ValidLength(double length)
+		{
+			if (length > 0)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		public bool ValidSeats(int seats)
+		{
+			if (seats > 0)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		public bool ValidFuel(string fuel)
+		{
+			string[] fuelTypes = { "DIESEL", "GASOLINE", "ELECTRIC", "HYBRID" };
+			if (!string.IsNullOrWhiteSpace(fuel) && fuelTypes.Contains(fuel.ToUpper()))
+			{
+				return true;
+			}
+			return false;
+		}
+
+		public bool ValidVolume(int volume)
+		{
+			if (volume > 0)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		// filter only type
+		public IEnumerable<Vehicle> FilterVehiclesTypeOnly(string vehicleType)
+		{
+			if (vehicleType == "All")
+			{
+				return garage.ToList();
+			}
+			else
+			{
+				// compare the name of the class with the vehicleType input string, return only those that match
+				return garage.Where(v => v.GetType().Name.Equals(vehicleType));
+			}
+		}
+
+		// filter by 3 inputs
+		public IEnumerable<Vehicle> FilterVehiclesAll(string vehicleType, string attributeName, string attributeValue)
+		{
+			var filteredVehicles = FilterVehiclesTypeOnly(vehicleType);
+
+			switch (attributeName)
+			{
+				case "REGNUMBER":
+					filteredVehicles = filteredVehicles.Where(v => v.RegNumber.Equals(attributeValue, StringComparison.OrdinalIgnoreCase));
+					break;
+				case "COLOR":
+					filteredVehicles = filteredVehicles.Where(v => v.Color.Equals(attributeValue, StringComparison.OrdinalIgnoreCase));
+					break;
+				case "WHEELS":
+					if (int.TryParse(attributeValue, out int wheels))
+					{
+						filteredVehicles = filteredVehicles.Where(v => v.Wheels == wheels);
+					}
+					break;
+				default:
+					break;
+			}
+			return filteredVehicles;
+		}
 	}
 }
