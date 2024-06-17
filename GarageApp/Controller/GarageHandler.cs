@@ -181,27 +181,34 @@ namespace GarageApp.Controller
 			}
 		}
 
-		// filter by 3 inputs
-		public IEnumerable<Vehicle> FilterVehiclesAll(string vehicleType, string attributeName, string attributeValue)
+		// filter by any inputs
+		public IEnumerable<Vehicle> FilterVehicles(string vehicleType, Dictionary<string, string> filters)
 		{
 			var filteredVehicles = FilterVehiclesTypeOnly(vehicleType);
 
-			switch (attributeName)
+			foreach (var e in filters)
 			{
-				case "REGNUMBER":
-					filteredVehicles = filteredVehicles.Where(v => v.RegNumber.Equals(attributeValue, StringComparison.OrdinalIgnoreCase));
-					break;
-				case "COLOR":
-					filteredVehicles = filteredVehicles.Where(v => v.Color.Equals(attributeValue, StringComparison.OrdinalIgnoreCase));
-					break;
-				case "WHEELS":
-					if (int.TryParse(attributeValue, out int wheels))
-					{
-						filteredVehicles = filteredVehicles.Where(v => v.Wheels == wheels);
-					}
-					break;
-				default:
-					break;
+				switch (e.Key)
+				{
+					case "REGNUMBER":
+						filteredVehicles = filteredVehicles.Where(v => v.RegNumber.Equals(e.Value, StringComparison.OrdinalIgnoreCase));
+						break;
+					case "COLOR":
+						filteredVehicles = filteredVehicles.Where(v => v.Color.Equals(e.Value, StringComparison.OrdinalIgnoreCase));
+						break;
+					case "WHEELS":
+						if (int.TryParse(e.Value, out int wheels))
+						{
+							filteredVehicles = filteredVehicles.Where(v => v.Wheels == wheels);
+						}
+						else
+						{
+							throw new ArgumentException($"Invalid wheels value: {e.Value}");
+						}
+						break;
+					default:
+						throw new ArgumentException($"Invalid attribute name: {e.Key}");
+				}
 			}
 			return filteredVehicles;
 		}

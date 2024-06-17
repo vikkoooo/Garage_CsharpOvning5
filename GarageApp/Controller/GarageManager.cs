@@ -1,6 +1,7 @@
 ﻿using GarageApp.Model.Vehicles;
 using GarageApp.Viewer;
 using System.Linq.Expressions;
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -350,102 +351,64 @@ namespace GarageApp.Controller
 					break;
 			}
 
-			// Ask user if they want to filter by an attribute
-			var (inputSuccess, answer) = ui.PromptYesNoInput("Filter by attribute? (Y/N) ");
+			Dictionary<string, string> filters = new Dictionary<string, string>();
+			bool moreFiltering = true;
+			while (moreFiltering)
+			{
+				// Ask user if they want to filter by an attribute
+				var (inputSuccess, answer) = ui.PromptYesNoInput("Filter by more attributes? (Y/N) ");
 
-			if (!inputSuccess)
-			{
-				ui.PrintLine("Invalid (Y/N) input entered, please start with Y for Yes or N for No. Going back to main menu.");
-				return;
-			}
-			else
-			{
-				if (answer == 'Y')
+				if (!inputSuccess)
 				{
-					string attributeName = ui.GetUserTextInput("Enter attribute name (RegNumber, Color, Wheels): ").ToUpper();
-					string attributeValue = ui.GetUserTextInput("Enter filter value: ");
-
-					FilterSearch(vehicleType, attributeName, attributeValue);
-				}
-				else if (answer == 'N')
-				{
-					FilterSearch(vehicleType, null, null);
-				}
-			}
-		}
-		private void FilterSearch(string vehicleType, string attributeName, string attributeValue)
-		{
-			if (attributeName == null || attributeValue == null)
-			{
-				IEnumerable<Vehicle> filteredVehicles = handler.FilterVehiclesTypeOnly(vehicleType);
-
-				ui.PrintLine($"Filtered results for {vehicleType}");
-				foreach (var v in filteredVehicles)
-				{
-					ui.PrintLine(v.ToString());
-				}
-			}
-			else
-			{
-				IEnumerable<Vehicle> filteredVehicles = handler.FilterVehiclesAll(vehicleType, attributeName, attributeValue);
-
-				ui.PrintLine($"Filtered results for {vehicleType} with {attributeName} and value {attributeValue}");
-				foreach (var v in filteredVehicles)
-				{
-					ui.PrintLine(v.ToString());
-				}
-			}
-		}
-
-		/*
-		private void FilterVehiclesAttributeMenu()
-		{
-			ui.PrintLine("Menu for filter attribute (level 2)");
-			ui.PrintLine("1. All attributes");
-			ui.PrintLine("2. Registration number only");
-			ui.PrintLine("3. Colors only");
-			ui.PrintLine("4. Wheels only");
-			ui.PrintLine("0. Exit filter menu");
-		}
-
-		private void FilterVehiclesAttribute(string vehicleType)
-		{
-
-			ui.PrintLine($"Filtering by {vehicleType}");
-
-			FilterVehiclesAttributeMenu();
-
-			string attribute = ui.GetUserTextInput("Enter filter attribute choice: ");
-			string attributeValue = null;
-
-			switch (attribute)
-			{
-				case "1":
-					FilterSearch(vehicleType, "All", attributeValue);
-					break;
-				case "2":
-					attributeValue = ui.GetUserTextInput("Enter attribute filter value: ");
-					FilterSearch(vehicleType, "RegNumber", attributeValue);
-					break;
-				case "3":
-					attributeValue = ui.GetUserTextInput("Enter attribute filter value: ");
-					FilterSearch(vehicleType, "Color", attributeValue);
-					break;
-				case "4":
-					attributeValue = ui.GetUserTextInput("Enter attribute filter value: ");
-					FilterSearch(vehicleType, "Wheels", attributeValue);
-					break;
-				case "0":
-					ui.PrintLine($"Exiting {vehicleType} filter.");
+					ui.PrintLine("Invalid (Y/N) input entered, please start with Y for Yes or N for No. Going back to main menu.");
 					return;
-				default:
-					ui.PrintLine("Invalid choice. Please enter a number from 0 to 4");
-					break;
+				}
+				else
+				{
+					if (answer == 'Y')
+					{
+						string attributeName = ui.GetUserTextInput("Enter attribute name (RegNumber, Color, Wheels): ").ToUpper();
+						if (string.IsNullOrWhiteSpace(attributeName))
+						{
+							ui.PrintLine($"Invalid attribute name entered {attributeName}, going back to main menu");
+							return;
+						}
+						string attributeValue = ui.GetUserTextInput("Enter filter value: ");
+						if (string.IsNullOrWhiteSpace(attributeValue))
+						{
+							ui.PrintLine($"Invalid attribute value entered {attributeValue}, going back to main menu");
+							return;
+						}
+						filters.Add(attributeName, attributeValue);
+					}
+					else if (answer == 'N')
+					{
+						moreFiltering = false;
+					}
+				}
 			}
-
+			FilterSearch(vehicleType, filters);
 		}
-		*/
+		private void FilterSearch(string vehicleType, Dictionary<string, string> filters)
+		{
+			try
+			{
+				IEnumerable<Vehicle> filteredVehicles = handler.FilterVehicles(vehicleType, filters);
 
-
+				ui.PrintLine($"Filtered results");
+				foreach (var v in filteredVehicles)
+				{
+					ui.PrintLine(v.ToString());
+				}
+			}
+			catch (ArgumentException ex)
+			{
+				ui.PrintLine($"Error: {ex.Message}");
+			}
+			catch (Exception ex)
+			{
+				ui.PrintLine($"Unknown error: {ex.Message}");
+			}
+		}
 	}
 }
