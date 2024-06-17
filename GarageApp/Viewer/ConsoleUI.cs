@@ -1,4 +1,5 @@
 ﻿using GarageApp.Controller;
+using GarageApp.Interfaces;
 using GarageApp.Model.Vehicles;
 using System;
 using System.Collections.Generic;
@@ -10,19 +11,19 @@ using System.Xml.Serialization;
 
 namespace GarageApp.Viewer
 {
-	internal class ConsoleUI
+	internal class ConsoleUI : IUI
 	{
-		internal void PrintLine(string message)
+		public void PrintLine(string message)
 		{
 			Console.WriteLine(message);
 		}
 
-		internal void Print(string message)
+		public void Print(string message)
 		{
 			Console.Write(message);
 		}
 
-		internal int PromptNumericInput(string message)
+		public int PromptNumericInput(string message)
 		{
 			string input = GetUserTextInput(message);
 
@@ -41,7 +42,7 @@ namespace GarageApp.Viewer
 			}
 		}
 
-		internal (bool, char) PromptYesNoInput(string message)
+		public (bool, char) PromptYesNoInput(string message)
 		{
 			string input = GetUserTextInput(message);
 
@@ -67,7 +68,7 @@ namespace GarageApp.Viewer
 			}
 		}
 
-		internal string GetUserTextInput(string prompt)
+		public string GetUserTextInput(string prompt)
 		{
 			Print(prompt);
 			return Console.ReadLine();
