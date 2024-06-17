@@ -138,7 +138,7 @@ namespace GarageApp.Controller
 			switch (choice)
 			{
 				case "1":
-					regNumber = ui.GetUserTextInput("Registration number: ").ToUpper();
+					regNumber = ui.GetUserTextInput("Registration number (6 characters only numbers and letters): ").ToUpper();
 					if (!ValidRegNumber(regNumber))
 						goto invalidInput;
 
@@ -158,7 +158,7 @@ namespace GarageApp.Controller
 					vehicle = new Airplane(regNumber, color, wheels, engines);
 					break;
 				case "2":
-					regNumber = ui.GetUserTextInput("Registration number: ").ToUpper();
+					regNumber = ui.GetUserTextInput("Registration number (6 characters only numbers and letters): ").ToUpper();
 					if (!ValidRegNumber(regNumber))
 						goto invalidInput;
 
@@ -177,7 +177,7 @@ namespace GarageApp.Controller
 					vehicle = new Boat(regNumber, color, wheels, length);
 					break;
 				case "3":
-					regNumber = ui.GetUserTextInput("Registration number: ").ToUpper();
+					regNumber = ui.GetUserTextInput("Registration number (6 characters only numbers and letters): ").ToUpper();
 					if (!ValidRegNumber(regNumber))
 						goto invalidInput;
 
@@ -196,7 +196,7 @@ namespace GarageApp.Controller
 					vehicle = new Bus(regNumber, color, wheels, seats);
 					break;
 				case "4":
-					regNumber = ui.GetUserTextInput("Registration number: ").ToUpper();
+					regNumber = ui.GetUserTextInput("Registration number (6 characters only numbers and letters): ").ToUpper();
 					if (!ValidRegNumber(regNumber))
 						goto invalidInput;
 
@@ -208,14 +208,14 @@ namespace GarageApp.Controller
 					if (!ValidWheels(wheels))
 						goto invalidInput;
 
-					string fuel = ui.GetUserTextInput("Type of fuel: ");
+					string fuel = ui.GetUserTextInput("Type of fuel (Diesel, Gasoline, Electric, Hybrid): ");
 					if (!ValidFuel(fuel))
 						goto invalidInput;
 
 					vehicle = new Car(regNumber, color, wheels, fuel);
 					break;
 				case "5":
-					regNumber = ui.GetUserTextInput("Registration number: ").ToUpper();
+					regNumber = ui.GetUserTextInput("Registration number (6 characters only numbers and letters): ").ToUpper();
 					if (!ValidRegNumber(regNumber))
 						goto invalidInput;
 

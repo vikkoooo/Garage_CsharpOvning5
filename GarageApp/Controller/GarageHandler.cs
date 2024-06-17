@@ -67,10 +67,9 @@ namespace GarageApp.Controller
 			}
 		}
 
-		// find a vehicle by reg number (remember .toupper)
+		// find a vehicle by reg number
 		public Vehicle Search(string regNumber)
 		{
-			// todo: throw exception if we get null object back
 			try
 			{
 				return garage.Search(regNumber);
@@ -82,12 +81,11 @@ namespace GarageApp.Controller
 		}
 
 		// list all current vehicles
-		// dont know if it should be IEnumerable or IEnumerator?
-		// I think IEnumerable is correct by https://stackoverflow.com/questions/619564/what-is-the-difference-between-ienumerator-and-ienumerable
 		public IEnumerable<Vehicle> GetVehicles()
 		{
 			return garage.ToList();
 		}
+
 		// list specific type of vehicle and the count of those
 		// find using linq "all black with 4 wheels", "all motorcycles pink 3 wheels", "all trucks", "all red"
 	}
