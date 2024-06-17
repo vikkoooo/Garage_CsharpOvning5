@@ -138,7 +138,7 @@ namespace GarageApp.Controller
 			switch (choice)
 			{
 				case "1":
-					regNumber = ui.GetUserTextInput("Registration number: ");
+					regNumber = ui.GetUserTextInput("Registration number: ").ToUpper();
 					if (!ValidRegNumber(regNumber))
 						goto invalidInput;
 
@@ -155,10 +155,10 @@ namespace GarageApp.Controller
 					if (!ValidEngines(engines))
 						goto invalidInput;
 
-					vehicle = new Airplane(regNumber.ToUpper(), color, wheels, engines);
+					vehicle = new Airplane(regNumber, color, wheels, engines);
 					break;
 				case "2":
-					regNumber = ui.GetUserTextInput("Registration number: ");
+					regNumber = ui.GetUserTextInput("Registration number: ").ToUpper();
 					if (!ValidRegNumber(regNumber))
 						goto invalidInput;
 
@@ -174,10 +174,10 @@ namespace GarageApp.Controller
 					if (!ValidLength(length))
 						goto invalidInput;
 
-					vehicle = new Boat(regNumber.ToUpper(), color, wheels, length);
+					vehicle = new Boat(regNumber, color, wheels, length);
 					break;
 				case "3":
-					regNumber = ui.GetUserTextInput("Registration number: ");
+					regNumber = ui.GetUserTextInput("Registration number: ").ToUpper();
 					if (!ValidRegNumber(regNumber))
 						goto invalidInput;
 
@@ -193,10 +193,10 @@ namespace GarageApp.Controller
 					if (!ValidSeats(seats))
 						goto invalidInput;
 
-					vehicle = new Bus(regNumber.ToUpper(), color, wheels, seats);
+					vehicle = new Bus(regNumber, color, wheels, seats);
 					break;
 				case "4":
-					regNumber = ui.GetUserTextInput("Registration number: ");
+					regNumber = ui.GetUserTextInput("Registration number: ").ToUpper();
 					if (!ValidRegNumber(regNumber))
 						goto invalidInput;
 
@@ -212,10 +212,10 @@ namespace GarageApp.Controller
 					if (!ValidFuel(fuel))
 						goto invalidInput;
 
-					vehicle = new Car(regNumber.ToUpper(), color, wheels, fuel);
+					vehicle = new Car(regNumber, color, wheels, fuel);
 					break;
 				case "5":
-					regNumber = ui.GetUserTextInput("Registration number: ");
+					regNumber = ui.GetUserTextInput("Registration number: ").ToUpper();
 					if (!ValidRegNumber(regNumber))
 						goto invalidInput;
 
@@ -231,7 +231,7 @@ namespace GarageApp.Controller
 					if (!ValidVolume(volume))
 						goto invalidInput;
 
-					vehicle = new Motorcycle(regNumber.ToUpper(), color, wheels, volume);
+					vehicle = new Motorcycle(regNumber, color, wheels, volume);
 					break;
 				invalidInput:
 					ui.PrintLine("Invalid input. Going back to main menu");
@@ -265,7 +265,6 @@ namespace GarageApp.Controller
 
 		private bool ValidRegNumber(string regNumber)
 		{
-			regNumber = regNumber.ToUpper();
 			if ((string.IsNullOrEmpty(regNumber)) || regNumber.Length != 6 || !regNumber.All(char.IsLetterOrDigit) || IsTakenRegNumber(regNumber))
 			{
 				return false;
