@@ -24,7 +24,7 @@ namespace GarageApp.Viewer
 
 		internal int PromptNumericInput(string message)
 		{
-			string input = GetUserInput(message);
+			string input = GetUserTextInput(message);
 
 			// Validate input
 			if (string.IsNullOrWhiteSpace(input))
@@ -43,7 +43,7 @@ namespace GarageApp.Viewer
 
 		internal (bool, char) PromptYesNoInput(string message)
 		{
-			string input = GetUserInput(message);
+			string input = GetUserTextInput(message);
 
 			if (!string.IsNullOrWhiteSpace(input))
 			{
@@ -67,7 +67,7 @@ namespace GarageApp.Viewer
 			}
 		}
 
-		internal string GetUserInput(string prompt)
+		internal string GetUserTextInput(string prompt)
 		{
 			Print(prompt);
 			return Console.ReadLine();
