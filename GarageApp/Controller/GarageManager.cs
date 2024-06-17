@@ -78,7 +78,7 @@ namespace GarageApp.Controller
 			while (isRunning)
 			{
 				MainMenu();
-				string choice = ui.GetUserInput("Choice: ");
+				string choice = ui.GetUserTextInput("Choice: ");
 				switch (choice)
 				{
 					case "1":
@@ -123,62 +123,235 @@ namespace GarageApp.Controller
 			ui.PrintLine("5. Motorcycle");
 		}
 
+		// todo: break this function into more functions, its crazy long but works.
 		private void AddVehicle()
 		{
 			AddVehicleMenu();
-			string choice = ui.GetUserInput("Choice: ");
+			string choice = ui.GetUserTextInput("Choice: ");
 
-			string regNumber = ui.GetUserInput("Registration number: ");
-			string color = ui.GetUserInput("Color: ");
-			int wheels = ui.PromptNumericInput("Number of wheels: ");
+			// Declare variables outside of switch case
+			Vehicle vehicle = null;
+			string regNumber;
+			string color;
+			int wheels;
 
 			switch (choice)
 			{
 				case "1":
+					regNumber = ui.GetUserTextInput("Registration number: ");
+					if (!ValidRegNumber(regNumber))
+						goto invalidInput;
+
+					color = ui.GetUserTextInput("Color: ");
+					if (!ValidColor(color))
+						goto invalidInput;
+
+					wheels = ui.PromptNumericInput("Number of wheels: ");
+
+					if (!ValidWheels(wheels))
+						goto invalidInput;
+
 					int engines = ui.PromptNumericInput("Number of engines: ");
-					try
-					{
-						handler.Add(new Airplane(regNumber, color, wheels, engines));
-					}
-					catch (IndexOutOfRangeException e)
-					{
-						ui.PrintLine("Garage is full");
-					}
+					if (!ValidEngines(engines))
+						goto invalidInput;
+
+					vehicle = new Airplane(regNumber.ToUpper(), color, wheels, engines);
 					break;
 				case "2":
-					int length = ui.PromptNumericInput("Length: ");
-					handler.Add(new Boat(regNumber, color, wheels, length));
+					regNumber = ui.GetUserTextInput("Registration number: ");
+					if (!ValidRegNumber(regNumber))
+						goto invalidInput;
+
+					color = ui.GetUserTextInput("Color: ");
+					if (!ValidColor(color))
+						goto invalidInput;
+
+					wheels = ui.PromptNumericInput("Number of wheels: ");
+					if (!ValidWheels(wheels))
+						goto invalidInput;
+
+					double length = ui.PromptNumericInput("Length: ");
+					if (!ValidLength(length))
+						goto invalidInput;
+
+					vehicle = new Boat(regNumber.ToUpper(), color, wheels, length);
 					break;
 				case "3":
+					regNumber = ui.GetUserTextInput("Registration number: ");
+					if (!ValidRegNumber(regNumber))
+						goto invalidInput;
+
+					color = ui.GetUserTextInput("Color: ");
+					if (!ValidColor(color))
+						goto invalidInput;
+
+					wheels = ui.PromptNumericInput("Number of wheels: ");
+					if (!ValidWheels(wheels))
+						goto invalidInput;
+
 					int seats = ui.PromptNumericInput("Number of seats: ");
-					handler.Add(new Bus(regNumber, color, wheels, seats));
+					if (!ValidSeats(seats))
+						goto invalidInput;
+
+					vehicle = new Bus(regNumber.ToUpper(), color, wheels, seats);
 					break;
 				case "4":
-					string fuel = ui.GetUserInput("Type of fuel: ");
-					handler.Add(new Car(regNumber, color, wheels, fuel));
+					regNumber = ui.GetUserTextInput("Registration number: ");
+					if (!ValidRegNumber(regNumber))
+						goto invalidInput;
+
+					color = ui.GetUserTextInput("Color: ");
+					if (!ValidColor(color))
+						goto invalidInput;
+
+					wheels = ui.PromptNumericInput("Number of wheels: ");
+					if (!ValidWheels(wheels))
+						goto invalidInput;
+
+					string fuel = ui.GetUserTextInput("Type of fuel: ");
+					if (!ValidFuel(fuel))
+						goto invalidInput;
+
+					vehicle = new Car(regNumber.ToUpper(), color, wheels, fuel);
 					break;
 				case "5":
+					regNumber = ui.GetUserTextInput("Registration number: ");
+					if (!ValidRegNumber(regNumber))
+						goto invalidInput;
+
+					color = ui.GetUserTextInput("Color: ");
+					if (!ValidColor(color))
+						goto invalidInput;
+
+					wheels = ui.PromptNumericInput("Number of wheels: ");
+					if (!ValidWheels(wheels))
+						goto invalidInput;
+
 					int volume = ui.PromptNumericInput("Cylinder volume: ");
-					handler.Add(new Motorcycle(regNumber, color, wheels, volume));
+					if (!ValidVolume(volume))
+						goto invalidInput;
+
+					vehicle = new Motorcycle(regNumber.ToUpper(), color, wheels, volume);
 					break;
+				invalidInput:
+					ui.PrintLine("Invalid input. Going back to main menu");
+					return;
 				default:
 					ui.PrintLine("Invalid choice. Going back to main menu");
-					break;
+					return;
 			}
+			try
+			{
+				handler.Add(vehicle);
+				ui.PrintLine("Vehicle added successfully.");
+			}
+			catch (InvalidOperationException ex)
+			{
+				ui.PrintLine("Garage is full");
+			}
+			catch (Exception ex)
+			{
+				ui.PrintLine($"Unknown error: {ex.Message}");
+			}
+		}
+
+		private bool IsTakenRegNumber(string regNumber)
+		{
+			IEnumerable<Vehicle> list = handler.GetVehicles();
+			bool isTaken = list.Any(vehicle => vehicle.RegNumber == regNumber);
+
+			return isTaken;
+		}
+
+		private bool ValidRegNumber(string regNumber)
+		{
+			regNumber = regNumber.ToUpper();
+			if ((string.IsNullOrEmpty(regNumber)) || regNumber.Length != 6 || !regNumber.All(char.IsLetterOrDigit) || IsTakenRegNumber(regNumber))
+			{
+				return false;
+			}
+			return true;
+		}
+
+		private bool ValidColor(string color)
+		{
+			if (string.IsNullOrEmpty(color))
+			{
+				return false;
+			}
+			return true;
+		}
+
+		private bool ValidWheels(int wheels)
+		{
+			if (wheels > 0)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool ValidEngines(int engines)
+		{
+			if (engines > 0)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool ValidLength(double length)
+		{
+			if (length > 0)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool ValidSeats(int seats)
+		{
+			if (seats > 0)
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool ValidFuel(string fuel)
+		{
+			string[] fuelTypes = { "DIESEL", "GASOLINE", "ELECTRIC", "HYBRID" };
+			if (!string.IsNullOrWhiteSpace(fuel) && fuelTypes.Contains(fuel.ToUpper()))
+			{
+				return true;
+			}
+			return false;
+		}
+
+		private bool ValidVolume(int volume)
+		{
+			if (volume > 0)
+			{
+				return true;
+			}
+			return false;
 		}
 
 		private void RemoveVehicle()
 		{
-			string regNumber = ui.GetUserInput("Enter registration number of Vehicle to remove: ");
+			string regNumber = ui.GetUserTextInput("Enter registration number of Vehicle to remove: ");
 			try
 			{
 				handler.Remove(regNumber);
 				ui.PrintLine($"Success removing Vehicle with registration number: {regNumber}");
 			}
-			catch (Exception e)
+			catch (KeyNotFoundException ex)
 			{
-				ui.PrintLine($"Did not find any Vehicle with registration number {regNumber}");
-				ui.PrintLine($"DEVSTUFF: exeception e: {e.Message}");
+				ui.PrintLine($"{ex.Message}");
+			}
+			catch (Exception ex)
+			{
+				ui.PrintLine($"Unknown error: {ex.Message}");
 			}
 		}
 
@@ -193,17 +366,20 @@ namespace GarageApp.Controller
 
 		private void SearchVehicle()
 		{
-			string regNumber = ui.GetUserInput("Enter registration number of Vehicle to search for: ");
+			string regNumber = ui.GetUserTextInput("Enter registration number of Vehicle to search for: ");
 			try
 			{
 				Vehicle vehicle = handler.Search(regNumber);
 				ui.PrintLine($"Found vehicle: with registration number{vehicle.RegNumber}");
 				ui.PrintLine(vehicle.ToString());
 			}
-			catch (Exception e)
+			catch (KeyNotFoundException ex)
 			{
-				ui.PrintLine($"Did not find any Vehicle with registration number {regNumber}");
-				ui.PrintLine($"DEVSTUFF: exeception e: {e.Message}");
+				ui.PrintLine($"{ex.Message}");
+			}
+			catch (Exception ex)
+			{
+				ui.PrintLine($"Unknown error: {ex.Message}");
 			}
 		}
 	}
