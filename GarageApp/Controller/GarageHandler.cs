@@ -1,4 +1,5 @@
-﻿using GarageApp.Model;
+﻿using GarageApp.Interfaces;
+using GarageApp.Model;
 using GarageApp.Model.Vehicles;
 using GarageApp.Viewer;
 using System;
@@ -10,7 +11,7 @@ using static System.Diagnostics.Activity;
 
 namespace GarageApp.Controller
 {
-	internal class GarageHandler
+	internal class GarageHandler : IHandler
 	{
 		// Variables
 		private Garage<Vehicle> garage;
@@ -96,7 +97,7 @@ namespace GarageApp.Controller
 
 		public bool ValidRegNumber(string regNumber)
 		{
-			if ((string.IsNullOrEmpty(regNumber)) || regNumber.Length != 6 || !regNumber.All(char.IsLetterOrDigit) || IsTakenRegNumber(regNumber))
+			if (string.IsNullOrEmpty(regNumber) || regNumber.Length != 6 || !regNumber.All(char.IsLetterOrDigit) || IsTakenRegNumber(regNumber))
 			{
 				return false;
 			}
