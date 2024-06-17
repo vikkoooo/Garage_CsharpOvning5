@@ -59,7 +59,7 @@ namespace GarageApp.Controller
 		{
 			try
 			{
-				garage.Remove(regNumber.ToUpper());
+				garage.Remove(regNumber);
 			}
 			catch (Exception)
 			{
@@ -73,13 +73,12 @@ namespace GarageApp.Controller
 			// todo: throw exception if we get null object back
 			try
 			{
-				return garage.Search(regNumber.ToUpper());
+				return garage.Search(regNumber);
 			}
 			catch (Exception)
 			{
 				throw;
 			}
-
 		}
 
 		// list all current vehicles
