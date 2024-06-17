@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GarageApp.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GarageApp.Model.Vehicles
 {
-	internal abstract class Vehicle
+	internal abstract class Vehicle : IVehicle
 	{
 		public string RegNumber { get; protected set; }
 		public string Color { get; protected set; }

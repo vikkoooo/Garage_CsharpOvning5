@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GarageApp.Interfaces
+﻿namespace GarageApp.Interfaces
 {
 	internal interface IVehicle
 	{
+		string Color { get; }
+		string RegNumber { get; }
+		int Wheels { get; }
+
+		string ToString();
 	}
 }
