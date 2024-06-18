@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace GarageApp.Model
 {
-	internal class Garage<T> : IEnumerable<T> where T : Vehicle
+	public class Garage<T> : IEnumerable<T> where T : Vehicle
 	{
 		// Variables
 		private T[] data;
@@ -24,7 +24,8 @@ namespace GarageApp.Model
 			this.size = size;
 		}
 
-		// Methods
+		// Operation methods
+		// Add element to the array, if it is not full.
 		public void Add(T element)
 		{
 			if (IsFull())
@@ -33,6 +34,9 @@ namespace GarageApp.Model
 				data[count++] = element; // count is increased after the operation has processed
 		}
 
+		// Attempts to remove one element from the array if it is found
+		// It will take the last element and move in place of the one we are removing, clearing the latest space
+		// This will make sure the array does not contain any "holes"
 		public void Remove(string regNumber)
 		{
 			for (int i = 0; i < count; i++)
@@ -48,6 +52,7 @@ namespace GarageApp.Model
 			throw new KeyNotFoundException("Did not find any Vehicle with that registration number");
 		}
 
+		// Will return Vehicle object if we find an object that matches registration number
 		public T Search(string regNumber)
 		{
 			for (int i = 0; i < count; i++)
@@ -60,6 +65,7 @@ namespace GarageApp.Model
 			throw new KeyNotFoundException("Did not find any Vehicle with that registration number");
 		}
 
+		// Checking whether the datastructure is expected to be full
 		private bool IsFull()
 		{
 			if (count == size)
@@ -68,7 +74,8 @@ namespace GarageApp.Model
 				return false;
 		}
 
-		// todo: this will generate some problem according to dimitris
+		// The GetEnumerator code will generate some problem according to dimitris
+		// Answer: I cant see the problem here, we will not go out of bounce, we should not encounter null
 		public IEnumerator<T> GetEnumerator()
 		{
 			for (int i = 0; i < count; i++)
@@ -77,6 +84,7 @@ namespace GarageApp.Model
 			}
 		}
 
+		// Send to GetEnumerator() function
 		IEnumerator IEnumerable.GetEnumerator()
 		{
 			return GetEnumerator();

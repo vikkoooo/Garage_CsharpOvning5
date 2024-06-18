@@ -86,16 +86,18 @@ namespace GarageApp.Controller
 			return garage.ToList();
 		}
 
+		// Checking if reg number already exists in our collection
 		public bool IsTakenRegNumber(string regNumber)
 		{
 			IEnumerable<Vehicle> list = GetVehicles();
-			bool isTaken = list.Any(vehicle => vehicle.RegNumber == regNumber);
-
-			return isTaken;
+			return list.Any(vehicle => vehicle.RegNumber == regNumber); // returns true when we have a match 
 		}
 
+		// Functions checking validity, could have more "rules". 
+		// Checking reg number rules, the length and it contains the correct type of characters
 		public bool ValidRegNumber(string regNumber)
 		{
+			// if some of the cases is true, we have invalid regnumber
 			if (string.IsNullOrEmpty(regNumber) || regNumber.Length != 6 || !regNumber.All(char.IsLetterOrDigit) || IsTakenRegNumber(regNumber))
 			{
 				return false;
@@ -103,6 +105,7 @@ namespace GarageApp.Controller
 			return true;
 		}
 
+		// Currently accepts any string input as color
 		public bool ValidColor(string color)
 		{
 			if (string.IsNullOrEmpty(color))
@@ -112,15 +115,17 @@ namespace GarageApp.Controller
 			return true;
 		}
 
+		// Will accept any type of wheels as long as its not negative
 		public bool ValidWheels(int wheels)
 		{
-			if (wheels > 0)
+			if (wheels >= 0)
 			{
 				return true;
 			}
 			return false;
 		}
 
+		// Must have at least one engine
 		public bool ValidEngines(int engines)
 		{
 			if (engines > 0)
@@ -130,6 +135,7 @@ namespace GarageApp.Controller
 			return false;
 		}
 
+		// Must be at least 1 cm
 		public bool ValidLength(double length)
 		{
 			if (length > 0)
@@ -139,6 +145,7 @@ namespace GarageApp.Controller
 			return false;
 		}
 
+		// Must have at least 1 seat
 		public bool ValidSeats(int seats)
 		{
 			if (seats > 0)
@@ -148,16 +155,19 @@ namespace GarageApp.Controller
 			return false;
 		}
 
+		// Currently hardcoded fueltypes. Perhaps there is a better solution for this,
+		// but a GUI application would use radioboxes which will be cleaner.
 		public bool ValidFuel(string fuel)
 		{
-			string[] fuelTypes = { "DIESEL", "GASOLINE", "ELECTRIC", "HYBRID" };
-			if (!string.IsNullOrWhiteSpace(fuel) && fuelTypes.Contains(fuel.ToUpper()))
+			string[] fuelTypes = { "Diesel", "Gasoline", "Electric", "Hybrid" };
+			if (!string.IsNullOrWhiteSpace(fuel) && fuelTypes.Contains(fuel, StringComparer.OrdinalIgnoreCase)) // note StringComparer here
 			{
 				return true;
 			}
 			return false;
 		}
 
+		// Engine volume minimum of 1 cc
 		public bool ValidVolume(int volume)
 		{
 			if (volume > 0)
@@ -167,47 +177,52 @@ namespace GarageApp.Controller
 			return false;
 		}
 
-		// filter only type
+		// filter only by type "step 1"
 		public IEnumerable<Vehicle> FilterVehiclesTypeOnly(string vehicleType)
 		{
-			if (vehicleType == "All")
+			if (vehicleType == "All") // basically means no filter off step one
 			{
-				return garage.ToList();
+				return garage.ToList(); // return entire collection, all vehicle types
 			}
 			else
 			{
 				// compare the name of the class with the vehicleType input string, return only those that match
-				return garage.Where(v => v.GetType().Name.Equals(vehicleType));
+				return garage.Where(vehicle => vehicle.GetType().Name.Equals(vehicleType));
 			}
 		}
 
 		// filter by any inputs
 		public IEnumerable<Vehicle> FilterVehicles(string vehicleType, Dictionary<string, string> filters)
 		{
-			var filteredVehicles = FilterVehiclesTypeOnly(vehicleType);
+			var filteredVehicles = FilterVehiclesTypeOnly(vehicleType); // step 1: remove all that is not the correct type.
 
-			foreach (var e in filters)
+			// step 2: loop through all the pairs of filters and continue to narrow down the filteredVehicles list
+			foreach (var filter in filters)
 			{
-				switch (e.Key)
+				// KEY = Attribute name ex. (RegNumber, Color, Wheels)
+				// VALUE = Attribute value ex. (HEJ123, Green, 4)
+				switch (filter.Key)
 				{
 					case "REGNUMBER":
-						filteredVehicles = filteredVehicles.Where(v => v.RegNumber.Equals(e.Value, StringComparison.OrdinalIgnoreCase));
+						filteredVehicles = filteredVehicles.Where(vehicle => vehicle.RegNumber
+															.Equals(filter.Value, StringComparison.OrdinalIgnoreCase)); // note StringComparison instead of StringComparer
 						break;
 					case "COLOR":
-						filteredVehicles = filteredVehicles.Where(v => v.Color.Equals(e.Value, StringComparison.OrdinalIgnoreCase));
+						filteredVehicles = filteredVehicles.Where(vehicle => vehicle.Color
+															.Equals(filter.Value, StringComparison.OrdinalIgnoreCase));
 						break;
 					case "WHEELS":
-						if (int.TryParse(e.Value, out int wheels))
+						if (int.TryParse(filter.Value, out int filterWheels))
 						{
-							filteredVehicles = filteredVehicles.Where(v => v.Wheels == wheels);
+							filteredVehicles = filteredVehicles.Where(vehicle => vehicle.Wheels == filterWheels);
 						}
 						else
 						{
-							throw new ArgumentException($"Invalid wheels value: {e.Value}");
+							throw new ArgumentException($"Invalid wheels value: {filter.Value}");
 						}
 						break;
 					default:
-						throw new ArgumentException($"Invalid attribute name: {e.Key}");
+						throw new ArgumentException($"Invalid attribute name: {filter.Key}");
 				}
 			}
 			return filteredVehicles;

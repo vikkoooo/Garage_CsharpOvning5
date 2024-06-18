@@ -46,6 +46,7 @@ namespace GarageApp.Controller
 
 			return new Airplane(regNumber, color, wheels, engines);
 		}
+
 		// Generate Boat
 		private static Boat GenerateBoat()
 		{
@@ -56,6 +57,7 @@ namespace GarageApp.Controller
 
 			return new Boat(regNumber, color, wheels, length);
 		}
+
 		// Generate Bus
 		private static Bus GenerateBus()
 		{
@@ -66,6 +68,7 @@ namespace GarageApp.Controller
 
 			return new Bus(regNumber, color, wheels, seats);
 		}
+
 		// Generate Car
 		private static Car GenerateCar()
 		{
@@ -76,6 +79,7 @@ namespace GarageApp.Controller
 
 			return new Car(regNumber, color, wheels, fuel);
 		}
+
 		// Generate Motorcycle
 		private static Motorcycle GenerateMotorcycle()
 		{
@@ -87,6 +91,9 @@ namespace GarageApp.Controller
 			return new Motorcycle(regNumber, color, wheels, volume);
 		}
 
+		// Helper methods
+		// Generating registration number from set of possible characters
+		// Hardcoded that the registration number will become 6 characters long
 		private static string GenerateRegNumber()
 		{
 			string possibleChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -100,17 +107,20 @@ namespace GarageApp.Controller
 			return result;
 		}
 
+		// Generating number of wheels from 1 to 10
 		private static int GenerateWheels()
 		{
 			return rand.Next(1, 11);
 		}
 
+		// Generating a random color from the hardcoded set of predefined colors
 		private static string GenerateColor()
 		{
 			string[] colors = { "Red", "Blue", "Yellow", "White", "Black" };
 			return colors[rand.Next(0, colors.Length)];
 		}
 
+		// Generation a fueltype from the hardcoded set of possible fuel types
 		private static string GenerateFuel()
 		{
 			string[] fuelTypes = { "Diesel", "Gasoline", "Electric", "Hybrid" };
