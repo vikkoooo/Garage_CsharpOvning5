@@ -488,7 +488,7 @@ namespace GarageApp.Controller
 				if (!inputSuccess)
 				{
 					ui.PrintLine("Invalid (Y/N) input entered, please start with Y for Yes or N for No");
-					break;
+					continue;
 				}
 				else
 				{
@@ -499,25 +499,25 @@ namespace GarageApp.Controller
 						if (string.IsNullOrWhiteSpace(attributeName)) // Bad input check
 						{
 							ui.PrintLine($"Invalid attribute name entered {attributeName}");
-							break;
+							continue;
 						}
 
 						// Fetch attribute value to filter by 
 						string attributeValue = ui.GetUserTextInput("Enter filter value: ");
 						if (string.IsNullOrWhiteSpace(attributeValue)) // Bad input check
 						{
-							ui.PrintLine($"Invalid attribute value entered {attributeValue}, going back to main menu");
-							break;
+							ui.PrintLine($"Invalid attribute value entered {attributeValue}");
+							continue;
 						}
 						filters.Add(attributeName, attributeValue); // add to current filters datastructure
 					}
 					else if (answer == 'N')
 					{
 						moreFiltering = false; // user is done, exit while loop and execute
+						FilterSearch(vehicleType, filters); // execute the search
 					}
 				}
 			}
-			FilterSearch(vehicleType, filters); // execute the search
 		}
 
 		// Executes search/filtering
