@@ -14,7 +14,12 @@ namespace GarageApp.Tests
 			}
 		}
 
-		[Fact]
+        public GarageTest()
+        {
+            
+        }
+
+        [Fact]
 		public void Add_AddVehicleGarageNotFull_AddVehicle()
 		{
 			// Arrange (setup what should be tested, instances variables etc)

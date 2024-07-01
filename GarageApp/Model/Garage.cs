@@ -42,12 +42,12 @@ namespace GarageApp.Model
 		// This will make sure the array does not contain any "holes"
 		public void Remove(string regNumber)
 		{
-			for (int i = 0; i < count; i++)
+			for (int i = 0; i < data.Length; i++)
 			{
-				if (data[i].RegNumber.Equals(regNumber))
+				if (data[i] != null && data[i].RegNumber.Equals(regNumber))
 				{
-					data[i] = data[count - 1]; // move the last element of the array to current position to avoid a "hole" in the dataset
-					data[count - 1] = null; // clear last position to avoid confusion
+					//data[i] = data[count - 1]; // move the last element of the array to current position to avoid a "hole" in the dataset
+					data[i] = null!; // clear last position to avoid confusion
 					count--; // we have now successfully overwritten the element we was looking for, decrease array count
 					return;
 				}
@@ -60,7 +60,7 @@ namespace GarageApp.Model
 		{
 			for (int i = 0; i < count; i++)
 			{
-				if (data[i].RegNumber.Equals(regNumber))
+				if (data[i].RegNumber.Equals(regNumber, StringComparison.OrdinalIgnoreCase))
 				{
 					return data[i];
 				}

@@ -11,7 +11,7 @@ namespace GarageApp.Interfaces
         IEnumerable<Vehicle> GetVehicles();
         bool IsTakenRegNumber(string regNumber);
         void Remove(string regNumber);
-        Vehicle Search(string regNumber);
+        Vehicle? Search(string regNumber);
         bool ValidColor(string color);
         bool ValidEngines(int engines);
         bool ValidFuel(string fuel);

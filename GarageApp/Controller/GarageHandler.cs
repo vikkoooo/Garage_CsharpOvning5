@@ -53,27 +53,16 @@ namespace GarageApp.Controller
 		// remove vehicle from garage
 		public void Remove(string regNumber)
 		{
-			try
-			{
+		
 				garage.Remove(regNumber);
-			}
-			catch (Exception)
-			{
-				throw;
-			}
+			
+			
 		}
 
 		// find a vehicle by reg number
-		public Vehicle Search(string regNumber)
+		public Vehicle? Search(string regNumber)
 		{
-			try
-			{
-				return garage.Search(regNumber);
-			}
-			catch (Exception)
-			{
-				throw;
-			}
+				return garage.FirstOrDefault(v => v.RegNumber.Equals(regNumber));
 		}
 
 		// list all current vehicles
@@ -199,7 +188,7 @@ namespace GarageApp.Controller
 				// VALUE = Attribute value ex. (HEJ123, Green, 4)
 				switch (filter.Key)
 				{
-					case "REGNUMBER":
+					case SearchConstants.RegNumber:
 						filteredVehicles = filteredVehicles.Where(vehicle => vehicle.RegNumber
 															.Equals(filter.Value, StringComparison.OrdinalIgnoreCase)); // note StringComparison instead of StringComparer
 						break;
