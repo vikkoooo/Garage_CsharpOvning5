@@ -1,15 +1,17 @@
 ﻿using GarageApp.Model.Vehicles;
 using GarageApp.Viewer;
+using System.Drawing;
 using System.Linq.Expressions;
+using System.Security.Cryptography;
 
 namespace GarageApp.Controller
 {
 	internal class GarageManager
 	{
 		private ConsoleUI ui; // ui instance passed from Program.cs
-		private GarageHandler handler; // handler instance which interacts with datastructure
+		private GarageHandler handler = null!; // handler instance which interacts with datastructure
 		private bool isRunning = false; // main application flag
-		private int size; // tmp variable used on launch to set garage size
+		//private int size; // tmp variable used on launch to set garage size
 
 		public GarageManager(ConsoleUI ui)
 		{
@@ -19,6 +21,7 @@ namespace GarageApp.Controller
 		// before main application starts, we need to fetch some settings from the user
 		internal void Launch()
 		{
+			int size;
 			// Get garage size before starting the app
 			do
 			{
@@ -137,9 +140,9 @@ namespace GarageApp.Controller
 			string choice = ui.GetUserTextInput("Choice: ");
 
 			Vehicle vehicle = null; // vehicle instance which will be added in the end of the function
-			string regNumber; // needs to be declared outside of scope or we will have to have different names in each switch case
-			string color;
-			int wheels;
+			//string regNumber; // needs to be declared outside of scope or we will have to have different names in each switch case
+			//string color;
+			//int wheels;
 
 			// Depending on the choice (selections as per AddVehicleMenu), run logic for the specific Vehicle
 			switch (choice)
@@ -147,17 +150,9 @@ namespace GarageApp.Controller
 				// Airplane
 				case "1":
 					// Properties for all vehicles
-					regNumber = ui.GetUserTextInput("Registration number (6 characters only numbers and letters): ").ToUpper();
-					if (!handler.ValidRegNumber(regNumber))
-						goto invalidInput; // early exit when user fails, to avoid user having to enter all data and fail later on
-
-					color = ui.GetUserTextInput("Color: ");
-					if (!handler.ValidColor(color))
-						goto invalidInput;
-
-					wheels = ui.PromptNumericInput("Number of wheels: ");
-					if (!handler.ValidWheels(wheels))
-						goto invalidInput;
+					var res = GetCommonVehicleProperties();
+					
+					 (string regNumber,string color,int wheels) = GetCommonVehicleProperties();
 
 					// Specific for only Airplane
 					int engines = ui.PromptNumericInput("Number of engines: ");
@@ -265,7 +260,22 @@ namespace GarageApp.Controller
 			{
 				ui.PrintLine($"Unknown error: {ex.Message}");
 			}
-		}
+        }
+        private CommonVehicleProps GetCommonVehicleProperties()
+		{
+            var regNumber = ui.GetUserTextInput("Registration number (6 characters only numbers and letters): ").ToUpper();
+			handler.ValidRegNumber(regNumber);
+				//ui.PrintError(regNumber);// goto invalidInput; // early exit when user fails, to avoid user having to enter all data and fail later on
+
+            var  color = ui.GetUserTextInput("Color: ");
+            //if (!handler.ValidColor(color))
+               // goto invalidInput;
+
+            var wheels = ui.PromptNumericInput("Number of wheels: ");
+			//if (!handler.ValidWheels(wheels))
+			//    goto invalidInput;
+			return new  CommonVehicleProps(regNumber, color, wheels);
+        }
 
 		// Remove vehicle from garage
 		private void RemoveVehicle()

@@ -44,14 +44,10 @@ namespace GarageApp.Controller
 		// add vehicle to garage
 		public void Add(Vehicle v)
 		{
-			try
-			{
+			
 				garage.Add(v);
-			}
-			catch (Exception)
-			{
-				throw;
-			}
+			
+			
 		}
 
 		// remove vehicle from garage

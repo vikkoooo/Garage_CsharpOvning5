@@ -31,7 +31,10 @@ namespace GarageApp.Model
 			if (IsFull())
 				throw new InvalidOperationException("Garage is full");
 			else
-				data[count++] = element; // count is increased after the operation has processed
+			{
+				var index = Array.IndexOf(data, null);
+				data[index] = element; // count is increased after the operation has processed
+			}
 		}
 
 		// Attempts to remove one element from the array if it is found
@@ -66,21 +69,16 @@ namespace GarageApp.Model
 		}
 
 		// Checking whether the datastructure is expected to be full
-		private bool IsFull()
-		{
-			if (count == size)
-				return true;
-			else
-				return false;
-		}
+		public bool IsFull() => count == size;
 
 		// The GetEnumerator code will generate some problem according to dimitris
 		// Answer: I cant see the problem here, we will not go out of bounce, we should not encounter null
 		public IEnumerator<T> GetEnumerator()
 		{
-			for (int i = 0; i < count; i++)
+			for (int i = 0; i < data.Length; i++)
 			{
-				yield return data[i];
+				if (data[i] != null)
+					yield return data[i];
 			}
 		}
 
